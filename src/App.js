@@ -3,13 +3,41 @@ import {Image, Layer, Stage} from 'react-konva'
 import {useEffect, useRef, useState} from 'react'
 import useImage from 'use-image'
 
+function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window
+  return {
+    width,
+    height
+  }
+}
+
+function useWindowDimensions() {
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions())
+
+  useEffect(() => {
+    function handleResize() {
+      console.log('handleResize')
+      setWindowDimensions(getWindowDimensions())
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  return windowDimensions
+}
+
 function App() {
   const canvasRef = useRef(null)
-  const { innerWidth: winWidth, innerHeight: winHeight } = window
+  const imageRef = useRef(null)
+  const { width: winWidth, height: winHeight } = useWindowDimensions()
+  const canvasWidth = winWidth
+  const canvasHeight = winHeight - 50
   const [currentFile, setCurrentFile] = useState(null)
   const [image] = useImage(currentFile)
   const width = (image && image.width) || 100
   const height = (image && image.height) || 100
+  const scaleFactor = Math.min(canvasWidth / width, canvasHeight / height)
   const onFileSelect = (event) => {
     const fr = new FileReader()
     fr.onloadend = () => {
@@ -18,19 +46,24 @@ function App() {
     fr.readAsDataURL(event.target.files[0])
   }
 
-  useEffect(() => {
-    if (canvasRef.current) {
-      const scaleFactor = winWidth / width
-      const ctx = canvasRef.current.getContext('2d')
-      ctx.scale(scaleFactor,scaleFactor)
-    }
-  }, [width, winWidth])
+  console.log('canvasWidth', canvasWidth)
+  console.log('canvasHeight', canvasHeight)
+
+  const setCanvas = (val) => {
+    console.log('render canvas', val)
+    canvasRef.current = val
+  }
 
   return (
     <div className="App">
-      <Stage width={width} height={height}>
-        <Layer ref={canvasRef}>
-          <Image image={image} />
+      <Stage
+        width={canvasWidth}
+        height={canvasHeight}
+        scaleX={scaleFactor}
+        scaleY={scaleFactor}
+      >
+        <Layer ref={setCanvas}>
+          <Image ref={imageRef} image={image} />
         </Layer>
       </Stage>
       <input type="file" onChange={onFileSelect} />
