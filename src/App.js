@@ -97,12 +97,18 @@ function App() {
     downloadURI(stageRef.current.toDataURL(), 'flomaster-image.png')
   }
 
+  const onClear = () => {
+    setCurrentFile(null)
+    setLines([])
+  }
+
   return (
     <div className="App">
       <div>
         <input type="file" onChange={onFileSelect} />
       </div>
-      <button onClick={onSave}>Save</button>
+      <button onClick={onSave}>Export</button>
+      <button onClick={onClear}>Reset</button>
 
       <Stage
         ref={stageRef}
