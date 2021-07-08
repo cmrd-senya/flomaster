@@ -1,5 +1,5 @@
 {
-  "name": "chpoc",
+  "name": "flomaster",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -40,6 +40,7 @@
     "jest-circus": "26.6.0",
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
+    "astroturf": "^1.0.0-beta.22",
     "konva": "^8.1.1",
     "mini-css-extract-plugin": "0.11.3",
     "optimize-css-assets-webpack-plugin": "5.0.4",

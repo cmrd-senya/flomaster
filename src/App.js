@@ -2,6 +2,7 @@ import './App.css'
 import {Image, Layer, Line, Stage} from 'react-konva'
 import {useEffect, useRef, useState} from 'react'
 import useImage from 'use-image'
+import styled from 'astroturf/react'
 
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
@@ -36,6 +37,10 @@ function useWindowDimensions() {
 
   return windowDimensions
 }
+
+const FlexBox = styled('div')`
+  display: flex;
+`
 
 function App() {
   const [lines, setLines] = useState([])
@@ -107,8 +112,15 @@ function App() {
       <div>
         <input type="file" onChange={onFileSelect} />
       </div>
-      <button onClick={onSave}>Export</button>
-      <button onClick={onClear}>Reset</button>
+      <FlexBox>
+        <button onClick={onSave}>Export</button>
+        <button onClick={onClear}>Reset</button>
+        <div>
+        Tool:
+          <input type="radio" id="brush" value="brush" checked />
+          <label htmlFor="brush">Brush</label>
+        </div>
+      </FlexBox>
 
       <Stage
         ref={stageRef}
