@@ -50,7 +50,7 @@ const ToolbarElement = styled('div')`
 
 const Tool = ({id, label, ...inputProps}) => (
   <>
-    <input type="radio" id={id} value={id} {...inputProps} />
+    <input name="tool" type="radio" id={id} value={id} {...inputProps} />
     <label htmlFor={id}>{label}</label>
   </>
 )
@@ -59,7 +59,19 @@ Tool.propTypes = {
   label: PropTypes.string,
 }
 
+const ToolsList = [
+  {
+    id: 'brush',
+    label: 'Brush'
+  },
+  {
+    id: 'arrow',
+    label: 'Arrow'
+  }
+]
+
 function App() {
+  const [activeTool, setActiveTool] = useState(ToolsList[0].id)
   const [lines, setLines] = useState([])
   const isDrawing = useRef(false)
 
@@ -124,6 +136,11 @@ function App() {
     setLines([])
   }
 
+  const onToolChange = ({ target: {value}}) => {
+    console.log(value)
+    setActiveTool(value)
+  }
+
   return (
     <div className="App">
       <div>
@@ -140,8 +157,17 @@ function App() {
           <FlexBox>
           Tools:
             <div>
-              <Tool id="brush" label="Brush" checked />
-              <Tool id="arrow" label="Arrow" />
+              {
+                ToolsList.map(({id, label}) => (
+                  <Tool
+                    key={id}
+                    id={id}
+                    label={label}
+                    checked={id === activeTool}
+                    onChange={onToolChange}
+                  />
+                ))
+              }
             </div>
           </FlexBox>
         </ToolbarElement>
