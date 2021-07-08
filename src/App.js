@@ -3,6 +3,7 @@ import {Image, Layer, Line, Stage} from 'react-konva'
 import {useEffect, useRef, useState} from 'react'
 import useImage from 'use-image'
 import styled from 'astroturf/react'
+import PropTypes from 'prop-types'
 
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
@@ -40,7 +41,23 @@ function useWindowDimensions() {
 
 const FlexBox = styled('div')`
   display: flex;
+  align-items: center;
 `
+
+const ToolbarElement = styled('div')`
+  padding: 0 2px;
+`
+
+const Tool = ({id, label, ...inputProps}) => (
+  <>
+    <input type="radio" id={id} value={id} {...inputProps} />
+    <label htmlFor={id}>{label}</label>
+  </>
+)
+Tool.propTypes = {
+  id: PropTypes.string,
+  label: PropTypes.string,
+}
 
 function App() {
   const [lines, setLines] = useState([])
@@ -113,13 +130,21 @@ function App() {
         <input type="file" onChange={onFileSelect} />
       </div>
       <FlexBox>
-        <button onClick={onSave}>Export</button>
-        <button onClick={onClear}>Reset</button>
-        <div>
-        Tool:
-          <input type="radio" id="brush" value="brush" checked />
-          <label htmlFor="brush">Brush</label>
-        </div>
+        <ToolbarElement>
+          <button onClick={onSave}>Export</button>
+        </ToolbarElement>
+        <ToolbarElement>
+          <button onClick={onClear}>Reset</button>
+        </ToolbarElement>
+        <ToolbarElement>
+          <FlexBox>
+          Tools:
+            <div>
+              <Tool id="brush" label="Brush" checked />
+              <Tool id="arrow" label="Arrow" />
+            </div>
+          </FlexBox>
+        </ToolbarElement>
       </FlexBox>
 
       <Stage
