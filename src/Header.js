@@ -11,6 +11,10 @@ const FlexBox = styled('div')`
   align-items: center;
 `
 
+const ToolBar = styled(FlexBox)`
+  padding-bottom: 2px;
+`
+
 const ToolBox = styled(FlexBox)`
   margin: 0 10px;
   padding: 0 12px;
@@ -60,7 +64,7 @@ export const Header = forwardRef(({
       <MenuBar>
         <input type="file" onChange={onFileSelect} />
       </MenuBar>
-      <FlexBox>
+      <ToolBar>
         <ToolbarElement>
           <button onClick={onSave}>Export</button>
         </ToolbarElement>
@@ -88,7 +92,7 @@ export const Header = forwardRef(({
         <ToolbarElement>
           Stroke width: <NumberInput type="number" max={100} />
         </ToolbarElement>
-      </FlexBox>
+      </ToolBar>
     </div>
   )
 })
