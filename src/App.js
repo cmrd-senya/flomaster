@@ -1,10 +1,9 @@
 import { Arrow, Image, Layer, Line, Stage } from 'react-konva'
 import { useEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
-import styled from 'astroturf/react'
-import PropTypes from 'prop-types'
 import { useBrush } from './useBrush'
 import { useArrow } from './useArrow'
+import { Header, ToolsList } from './Header'
 
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
@@ -39,52 +38,6 @@ function useWindowDimensions() {
 
   return windowDimensions
 }
-
-const MenuBar = styled('div')`
-  padding: 2px 0;
-`
-
-const FlexBox = styled('div')`
-  display: flex;
-  align-items: center;
-`
-
-const ToolBox = styled(FlexBox)`
-  margin: 0 10px;
-  padding: 0 12px;
-  border-left: 2px black solid;
-  border-right: 2px black solid;
-`
-
-const ToolbarElement = styled('div')`
-  padding: 0 2px;
-`
-
-const NumberInput = styled('input')`
-  width: 48px;
-`
-
-const Tool = ({ id, label, ...inputProps }) => (
-  <>
-    <input name="tool" type="radio" id={id} value={id} {...inputProps} />
-    <label htmlFor={id}>{label}</label>
-  </>
-)
-Tool.propTypes = {
-  id: PropTypes.string,
-  label: PropTypes.string,
-}
-
-const ToolsList = [
-  {
-    id: 'brush',
-    label: 'Brush'
-  },
-  {
-    id: 'arrow',
-    label: 'Arrow'
-  }
-]
 
 const useTools = (imageRef) => ({
   brush: useBrush(imageRef),
@@ -144,38 +97,13 @@ function App() {
 
   return (
     <div>
-      <MenuBar>
-        <input type="file" onChange={onFileSelect} />
-      </MenuBar>
-      <FlexBox>
-        <ToolbarElement>
-          <button onClick={onSave}>Export</button>
-        </ToolbarElement>
-        <ToolbarElement>
-          <button onClick={onClear}>Reset</button>
-        </ToolbarElement>
-        <ToolbarElement>
-          <ToolBox>
-            Tools:
-            <div>
-              {
-                ToolsList.map(({ id, label }) => (
-                  <Tool
-                    key={id}
-                    id={id}
-                    label={label}
-                    checked={id === activeTool}
-                    onChange={onToolChange}
-                  />
-                ))
-              }
-            </div>
-          </ToolBox>
-        </ToolbarElement>
-        <ToolbarElement>
-          Stroke width: <NumberInput type="number" max={100} />
-        </ToolbarElement>
-      </FlexBox>
+      <Header
+        activeTool={activeTool}
+        onFileSelect={onFileSelect}
+        onClear={onClear}
+        onToolChange={onToolChange}
+        onSave={onSave}
+      />
 
       <Stage
         ref={stageRef}
