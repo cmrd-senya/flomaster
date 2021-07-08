@@ -41,6 +41,10 @@ function useWindowDimensions() {
   return windowDimensions
 }
 
+const MenuBar = styled('div')`
+  padding: 2px 0;
+`
+
 const FlexBox = styled('div')`
   display: flex;
   align-items: center;
@@ -130,9 +134,9 @@ function App() {
 
   return (
     <div className="App">
-      <div>
+      <MenuBar>
         <input type="file" onChange={onFileSelect} />
-      </div>
+      </MenuBar>
       <FlexBox>
         <ToolbarElement>
           <button onClick={onSave}>Export</button>
