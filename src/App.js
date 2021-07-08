@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
 import styled from 'astroturf/react'
 import PropTypes from 'prop-types'
+import { useBrush } from './useBrush'
+import { useArrow } from './useArrow'
 
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
@@ -70,49 +72,9 @@ const ToolsList = [
   }
 ]
 
-const useBrush = (imageRef) => {
-  const [lines, setLines] = useState([])
-  const isDrawing = useRef(false)
-
-  const handleMouseDown = () => {
-    isDrawing.current = true
-    const pos = imageRef.current.getRelativePointerPosition()
-    setLines([...lines, {  points: [pos.x, pos.y] }])
-  }
-
-  const handleMouseMove = () => {
-    // no drawing - skipping
-    if (!isDrawing.current) {
-      return
-    }
-    const point = imageRef.current.getRelativePointerPosition()
-    let lastLine = lines[lines.length - 1]
-    // add point
-    lastLine.points = lastLine.points.concat([point.x, point.y])
-
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine)
-    setLines(lines.concat())
-  }
-
-  const handleMouseUp = () => {
-    isDrawing.current = false
-  }
-
-  const clear = () => {setLines([])}
-
-  return {
-    lines,
-    handleMouseDown,
-    handleMouseMove,
-    handleMouseUp,
-    clear
-  }
-}
-
 const useTools = (imageRef) => ({
   brush: useBrush(imageRef),
-  arrow: {}
+  arrow: useArrow(imageRef)
 })
 
 function App() {
