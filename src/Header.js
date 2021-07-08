@@ -1,5 +1,6 @@
 import styled from 'astroturf/react'
 import PropTypes from 'prop-types'
+import { forwardRef } from 'react'
 
 const MenuBar = styled('div')`
   padding: 2px 0;
@@ -47,15 +48,15 @@ export const ToolsList = [
   }
 ]
 
-export const Header = ({
+export const Header = forwardRef(({
   activeTool,
   onFileSelect,
   onClear,
   onToolChange,
   onSave
-}) => {
+}, ref) => {
   return (
-    <div>
+    <div ref={ref}>
       <MenuBar>
         <input type="file" onChange={onFileSelect} />
       </MenuBar>
@@ -90,8 +91,9 @@ export const Header = ({
       </FlexBox>
     </div>
   )
-}
+})
 
+Header.displayName = 'Header'
 Header.propTypes = {
   activeTool: PropTypes.string,
   onFileSelect: PropTypes.function,

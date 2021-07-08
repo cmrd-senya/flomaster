@@ -1,5 +1,5 @@
 import { Arrow, Image, Layer, Line, Stage } from 'react-konva'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
 import { useBrush } from './useBrush'
 import { useArrow } from './useArrow'
@@ -45,11 +45,13 @@ const useTools = (imageRef) => ({
 })
 
 function App() {
+  const [headerSize, setHeaderSize] = useState(49)
   const [activeTool, setActiveTool] = useState(ToolsList[0].id)
   const stageRef = useRef(null)
 
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
+  const headerRef = useRef(null)
   const tools = useTools(imageRef)
   const {
     brush: { lines },
@@ -57,7 +59,7 @@ function App() {
   } = tools
   const { width: winWidth, height: winHeight } = useWindowDimensions()
   const canvasWidth = winWidth
-  const canvasHeight = winHeight - 50
+  const canvasHeight = winHeight - headerSize
   const [currentFile, setCurrentFile] = useState(null)
   const [image] = useImage(currentFile)
   const width = (image && image.width) || 1000
@@ -71,11 +73,16 @@ function App() {
     fr.readAsDataURL(event.target.files[0])
   }
 
+  useLayoutEffect(() => {
+    console.log('header size', headerRef.current.offsetHeight)
+    setHeaderSize(headerRef.current.offsetHeight)
+  }, [])
+
   console.log('canvasWidth', canvasWidth)
   console.log('canvasHeight', canvasHeight)
 
   const setCanvas = (val) => {
-    console.log('render canvas', val)
+    // console.log('render canvas', val)
     canvasRef.current = val
   }
 
@@ -98,6 +105,7 @@ function App() {
   return (
     <div>
       <Header
+        ref={headerRef}
         activeTool={activeTool}
         onFileSelect={onFileSelect}
         onClear={onClear}
