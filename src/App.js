@@ -1,5 +1,5 @@
 import './App.css'
-import { Image, Layer, Line, Stage } from 'react-konva'
+import { Arrow, Image, Layer, Line, Stage } from 'react-konva'
 import { useEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
 import styled from 'astroturf/react'
@@ -84,14 +84,17 @@ function App() {
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
   const tools = useTools(imageRef)
-  const { brush: { lines } } = tools
+  const {
+    brush: { lines },
+    arrow: { arrowInProgress, arrows }
+  } = tools
   const { width: winWidth, height: winHeight } = useWindowDimensions()
   const canvasWidth = winWidth
   const canvasHeight = winHeight - 50
   const [currentFile, setCurrentFile] = useState(null)
   const [image] = useImage(currentFile)
-  const width = (image && image.width) || 100
-  const height = (image && image.height) || 100
+  const width = (image && image.width) || 1000
+  const height = (image && image.height) || 1000
   const scaleFactor = Math.min(canvasWidth / width, canvasHeight / height)
   const onFileSelect = (event) => {
     const fr = new FileReader()
@@ -181,6 +184,19 @@ function App() {
                 // line.tool === 'eraser' ? 'destination-out' : 'source-over'
                 'source-over'
               }
+            />
+          ))}
+          {arrowInProgress && <Arrow
+            points={arrowInProgress.points}
+            stroke='red'
+            strokeWidth={10}
+          />}
+          {arrows.map((arrow, i) => (
+            <Arrow
+              key={i}
+              points={arrow.points}
+              stroke='red'
+              strokeWidth={10}
             />
           ))}
         </Layer>
