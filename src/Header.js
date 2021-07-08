@@ -2,13 +2,13 @@ import styled from 'astroturf/react'
 import PropTypes from 'prop-types'
 import { forwardRef } from 'react'
 
-const MenuBar = styled('div')`
-  padding: 2px 0;
-`
-
 const FlexBox = styled('div')`
   display: flex;
   align-items: center;
+`
+
+const MenuBar = styled(FlexBox)`
+  padding: 2px 0;
 `
 
 const ToolBar = styled(FlexBox)`
@@ -28,7 +28,17 @@ const ToolbarElement = styled('div')`
 
 const NumberInput = styled('input')`
   width: 48px;
+  margin-left: 8px;
 `
+
+const UndoButton = (props) => (
+  <button {...props}>↶</button>
+)
+
+const RedoButton = (props) => (
+  <button {...props}>↷</button>
+)
+
 
 const Tool = ({ id, label, ...inputProps }) => (
   <>
@@ -64,14 +74,20 @@ export const Header = forwardRef(({
   return (
     <div ref={ref}>
       <MenuBar>
-        <input type="file" onChange={onFileSelect} />
-      </MenuBar>
-      <ToolBar>
         <ToolbarElement>
           <button onClick={onSave}>Export</button>
         </ToolbarElement>
         <ToolbarElement>
+          <input type="file" onChange={onFileSelect} />
+        </ToolbarElement>
+      </MenuBar>
+      <ToolBar>
+        <ToolbarElement>
           <button onClick={onClear}>Reset</button>
+        </ToolbarElement>
+        <ToolbarElement>
+          <UndoButton onClick={() => {}} />
+          <RedoButton onClick={() => {}} />
         </ToolbarElement>
         <ToolbarElement>
           <ToolBox>

@@ -1,5 +1,5 @@
 import { Arrow, Image, Layer, Line, Stage } from 'react-konva'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
 import { useBrush } from './useBrush'
 import { useArrow } from './useArrow'
@@ -59,7 +59,8 @@ function App() {
   } = tools
   const { width: winWidth, height: winHeight } = useWindowDimensions()
   const canvasWidth = winWidth
-  const headerSize = (headerRef.current && headerRef.current.offsetHeight) || 51
+  const [initialHeaderSize, setInitialHeaderSize] = useState(0)
+  const headerSize = (headerRef.current && headerRef.current.offsetHeight) || initialHeaderSize
   const canvasHeight = winHeight - headerSize
   const [currentFile, setCurrentFile] = useState(null)
   const [image] = useImage(currentFile)
@@ -76,6 +77,10 @@ function App() {
 
   console.log('canvasWidth', canvasWidth)
   console.log('canvasHeight', canvasHeight)
+
+  useLayoutEffect(() => {
+    setInitialHeaderSize(headerRef.current.offsetHeight)
+  }, [])
 
   const setCanvas = (val) => {
     // console.log('render canvas', val)
