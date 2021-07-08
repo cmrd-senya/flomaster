@@ -1,4 +1,3 @@
-import './App.css'
 import { Arrow, Image, Layer, Line, Stage } from 'react-konva'
 import { useEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
@@ -50,8 +49,19 @@ const FlexBox = styled('div')`
   align-items: center;
 `
 
+const ToolBox = styled(FlexBox)`
+  margin: 0 10px;
+  padding: 0 12px;
+  border-left: 2px black solid;
+  border-right: 2px black solid;
+`
+
 const ToolbarElement = styled('div')`
   padding: 0 2px;
+`
+
+const NumberInput = styled('input')`
+  width: 48px;
 `
 
 const Tool = ({ id, label, ...inputProps }) => (
@@ -133,7 +143,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div>
       <MenuBar>
         <input type="file" onChange={onFileSelect} />
       </MenuBar>
@@ -145,8 +155,8 @@ function App() {
           <button onClick={onClear}>Reset</button>
         </ToolbarElement>
         <ToolbarElement>
-          <FlexBox>
-          Tools:
+          <ToolBox>
+            Tools:
             <div>
               {
                 ToolsList.map(({ id, label }) => (
@@ -160,7 +170,10 @@ function App() {
                 ))
               }
             </div>
-          </FlexBox>
+          </ToolBox>
+        </ToolbarElement>
+        <ToolbarElement>
+          Stroke width: <NumberInput type="number" max={100} />
         </ToolbarElement>
       </FlexBox>
 
