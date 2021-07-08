@@ -1,6 +1,6 @@
 import './App.css'
-import {Image, Layer, Line, Stage} from 'react-konva'
-import {useEffect, useRef, useState} from 'react'
+import { Image, Layer, Line, Stage } from 'react-konva'
+import { useEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
 import styled from 'astroturf/react'
 import PropTypes from 'prop-types'
@@ -48,7 +48,7 @@ const ToolbarElement = styled('div')`
   padding: 0 2px;
 `
 
-const Tool = ({id, label, ...inputProps}) => (
+const Tool = ({ id, label, ...inputProps }) => (
   <>
     <input name="tool" type="radio" id={id} value={id} {...inputProps} />
     <label htmlFor={id}>{label}</label>
@@ -70,37 +70,9 @@ const ToolsList = [
   }
 ]
 
-function App() {
-  const [activeTool, setActiveTool] = useState(ToolsList[0].id)
+const useBrush = (imageRef) => {
   const [lines, setLines] = useState([])
   const isDrawing = useRef(false)
-
-  const stageRef = useRef(null)
-  const canvasRef = useRef(null)
-  const imageRef = useRef(null)
-  const { width: winWidth, height: winHeight } = useWindowDimensions()
-  const canvasWidth = winWidth
-  const canvasHeight = winHeight - 50
-  const [currentFile, setCurrentFile] = useState(null)
-  const [image] = useImage(currentFile)
-  const width = (image && image.width) || 100
-  const height = (image && image.height) || 100
-  const scaleFactor = Math.min(canvasWidth / width, canvasHeight / height)
-  const onFileSelect = (event) => {
-    const fr = new FileReader()
-    fr.onloadend = () => {
-      setCurrentFile(fr.result)
-    }
-    fr.readAsDataURL(event.target.files[0])
-  }
-
-  console.log('canvasWidth', canvasWidth)
-  console.log('canvasHeight', canvasHeight)
-
-  const setCanvas = (val) => {
-    console.log('render canvas', val)
-    canvasRef.current = val
-  }
 
   const handleMouseDown = () => {
     isDrawing.current = true
@@ -127,16 +99,66 @@ function App() {
     isDrawing.current = false
   }
 
+  const clear = () => {setLines([])}
+
+  return {
+    lines,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    clear
+  }
+}
+
+const useTools = (imageRef) => ({
+  brush: useBrush(imageRef),
+  arrow: {}
+})
+
+function App() {
+  const [activeTool, setActiveTool] = useState(ToolsList[0].id)
+  const stageRef = useRef(null)
+
+  const canvasRef = useRef(null)
+  const imageRef = useRef(null)
+  const tools = useTools(imageRef)
+  const { brush: { lines } } = tools
+  const { width: winWidth, height: winHeight } = useWindowDimensions()
+  const canvasWidth = winWidth
+  const canvasHeight = winHeight - 50
+  const [currentFile, setCurrentFile] = useState(null)
+  const [image] = useImage(currentFile)
+  const width = (image && image.width) || 100
+  const height = (image && image.height) || 100
+  const scaleFactor = Math.min(canvasWidth / width, canvasHeight / height)
+  const onFileSelect = (event) => {
+    const fr = new FileReader()
+    fr.onloadend = () => {
+      setCurrentFile(fr.result)
+    }
+    fr.readAsDataURL(event.target.files[0])
+  }
+
+  console.log('canvasWidth', canvasWidth)
+  console.log('canvasHeight', canvasHeight)
+
+  const setCanvas = (val) => {
+    console.log('render canvas', val)
+    canvasRef.current = val
+  }
+
+  const { handleMouseDown, handleMouseUp, handleMouseMove } = tools[activeTool]
+
   const onSave = () => {
     downloadURI(stageRef.current.toDataURL(), 'flomaster-image.png')
   }
 
   const onClear = () => {
     setCurrentFile(null)
-    setLines([])
+    Object.values(tools).forEach(({ clear }) => clear())
   }
 
-  const onToolChange = ({ target: {value}}) => {
+  const onToolChange = ({ target: { value } }) => {
     console.log(value)
     setActiveTool(value)
   }
@@ -158,7 +180,7 @@ function App() {
           Tools:
             <div>
               {
-                ToolsList.map(({id, label}) => (
+                ToolsList.map(({ id, label }) => (
                   <Tool
                     key={id}
                     id={id}

@@ -19,6 +19,7 @@ module.exports = {
     'react'
   ],
   'rules': {
+    'object-curly-spacing': ['error', 'always'],
     'no-unused-vars': 'warn',
     'react/react-in-jsx-scope': 'off',
     'react-hooks/rules-of-hooks': 'error',
