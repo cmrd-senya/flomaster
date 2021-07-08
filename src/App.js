@@ -3,6 +3,16 @@ import {Image, Layer, Line, Stage} from 'react-konva'
 import {useEffect, useRef, useState} from 'react'
 import useImage from 'use-image'
 
+// function from https://stackoverflow.com/a/15832662/512042
+function downloadURI(uri, name) {
+  const link = document.createElement('a')
+  link.download = name
+  link.href = uri
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
+}
+
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window
   return {
@@ -31,6 +41,7 @@ function App() {
   const [lines, setLines] = useState([])
   const isDrawing = useRef(false)
 
+  const stageRef = useRef(null)
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
   const { width: winWidth, height: winHeight } = useWindowDimensions()
@@ -82,9 +93,19 @@ function App() {
     isDrawing.current = false
   }
 
+  const onSave = () => {
+    downloadURI(stageRef.current.toDataURL(), 'flomaster-image.png')
+  }
+
   return (
     <div className="App">
+      <div>
+        <input type="file" onChange={onFileSelect} />
+      </div>
+      <button onClick={onSave}>Save</button>
+
       <Stage
+        ref={stageRef}
         width={canvasWidth}
         height={canvasHeight}
         scaleX={scaleFactor}
@@ -111,7 +132,6 @@ function App() {
           ))}
         </Layer>
       </Stage>
-      <input type="file" onChange={onFileSelect} />
     </div>
   )
 }
