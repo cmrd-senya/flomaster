@@ -39,19 +39,20 @@ function useWindowDimensions() {
   return windowDimensions
 }
 
-const useTools = (imageRef) => ({
-  brush: useBrush(imageRef),
-  arrow: useArrow(imageRef)
+const useTools = (imageRef, settings) => ({
+  brush: useBrush(imageRef, settings),
+  arrow: useArrow(imageRef, settings)
 })
 
 function App() {
   const [activeTool, setActiveTool] = useState(ToolsList[0].id)
+  const [strokeWidth, setStrokeWidth] = useState(4)
   const stageRef = useRef(null)
 
   const canvasRef = useRef(null)
   const imageRef = useRef(null)
   const headerRef = useRef(null)
-  const tools = useTools(imageRef)
+  const tools = useTools(imageRef, { strokeWidth })
   const {
     brush: { lines },
     arrow: { arrowInProgress, arrows }
@@ -102,6 +103,8 @@ function App() {
       <Header
         ref={headerRef}
         activeTool={activeTool}
+        strokeWidth={strokeWidth}
+        onStrokeWidthChange={setStrokeWidth}
         onFileSelect={onFileSelect}
         onClear={onClear}
         onToolChange={onToolChange}
@@ -125,7 +128,7 @@ function App() {
               key={i}
               points={line.points}
               stroke="#df4b26"
-              strokeWidth={5}
+              strokeWidth={line.strokeWidth}
               tension={0.5}
               lineCap="round"
               globalCompositeOperation={
@@ -137,14 +140,14 @@ function App() {
           {arrowInProgress && <Arrow
             points={arrowInProgress.points}
             stroke='red'
-            strokeWidth={10}
+            strokeWidth={arrowInProgress.strokeWidth}
           />}
           {arrows.map((arrow, i) => (
             <Arrow
               key={i}
               points={arrow.points}
               stroke='red'
-              strokeWidth={10}
+              strokeWidth={arrow.strokeWidth}
             />
           ))}
         </Layer>

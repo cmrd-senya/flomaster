@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react'
 
-export const useBrush = (imageRef) => {
+export const useBrush = (imageRef, { strokeWidth }) => {
   const [lines, setLines] = useState([])
   const isDrawing = useRef(false)
 
   const handleMouseDown = () => {
     isDrawing.current = true
     const pos = imageRef.current.getRelativePointerPosition()
-    setLines([...lines, {  points: [pos.x, pos.y] }])
+    setLines([...lines, {  points: [pos.x, pos.y], strokeWidth }])
   }
 
   const handleMouseMove = () => {

@@ -54,9 +54,11 @@ export const ToolsList = [
 
 export const Header = forwardRef(({
   activeTool,
+  strokeWidth,
   onFileSelect,
   onClear,
   onToolChange,
+  onStrokeWidthChange,
   onSave
 }, ref) => {
   return (
@@ -90,7 +92,15 @@ export const Header = forwardRef(({
           </ToolBox>
         </ToolbarElement>
         <ToolbarElement>
-          Stroke width: <NumberInput type="number" max={100} />
+          Stroke width:
+          <NumberInput
+            value={strokeWidth}
+            type="number"
+            max={100}
+            onChange={(event) => {
+              onStrokeWidthChange(event.target.value)
+            }}
+          />
         </ToolbarElement>
       </ToolBar>
     </div>
@@ -100,8 +110,10 @@ export const Header = forwardRef(({
 Header.displayName = 'Header'
 Header.propTypes = {
   activeTool: PropTypes.string,
+  strokeWidth: PropTypes.number,
   onFileSelect: PropTypes.function,
   onClear: PropTypes.function,
   onToolChange: PropTypes.function,
+  onStrokeWidthChange: PropTypes.function,
   onSave: PropTypes.function
 }

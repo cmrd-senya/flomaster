@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 
-export const useArrow = (imageRef) => {
+export const useArrow = (imageRef, { strokeWidth }) => {
   const [arrows, setArrows] = useState([])
   const isDrawing = useRef(false)
   
@@ -19,7 +19,7 @@ export const useArrow = (imageRef) => {
     }
 
     const pos = imageRef.current.getRelativePointerPosition()
-    setArrowInProgress({  points: [pos.x, pos.y] })
+    setArrowInProgress({  points: [pos.x, pos.y], strokeWidth })
   }
 
   const handleMouseMove = () => {
@@ -28,6 +28,7 @@ export const useArrow = (imageRef) => {
     const point = imageRef.current.getRelativePointerPosition()
 
     setArrowInProgress((previous) => ({
+      strokeWidth,
       points: [
         previous.points[0], previous.points[1],
         point.x, point.y
