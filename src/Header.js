@@ -32,11 +32,11 @@ const NumberInput = styled('input')`
 `
 
 const UndoButton = (props) => (
-  <button {...props}>↶</button>
+  <button {...props} title="Undo">↶</button>
 )
 
 const RedoButton = (props) => (
-  <button {...props}>↷</button>
+  <button {...props} title="Redo">↷</button>
 )
 
 
