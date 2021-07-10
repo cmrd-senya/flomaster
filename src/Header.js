@@ -1,6 +1,9 @@
 import styled from 'astroturf/react'
 import PropTypes from 'prop-types'
 import { forwardRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { redo, undo } from './actions'
+import { futureHistoryEmpty, pastHistoryEmpty } from './selectors'
 
 const FlexBox = styled('div')`
   display: flex;
@@ -73,6 +76,8 @@ export const Header = forwardRef(({
   onStrokeWidthChange,
   onSave
 }, ref) => {
+  const dispatch = useDispatch()
+
   return (
     <div ref={ref}>
       <MenuBar>
@@ -88,8 +93,18 @@ export const Header = forwardRef(({
           <button onClick={onClear}>Reset</button>
         </ToolbarElement>
         <ToolbarElement>
-          <UndoButton onClick={() => {}} />
-          <RedoButton onClick={() => {}} />
+          <UndoButton
+            disabled={useSelector(pastHistoryEmpty)}  
+            onClick={() => {
+              dispatch(undo())
+            }} 
+          />
+          <RedoButton
+            disabled={useSelector(futureHistoryEmpty)}
+            onClick={() => {
+              dispatch(redo())
+            }}
+          />
         </ToolbarElement>
         <ToolbarElement>
           <ToolBox>

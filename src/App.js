@@ -4,6 +4,12 @@ import useImage from 'use-image'
 import { useBrush } from './useBrush'
 import { useArrow } from './useArrow'
 import { Header, ToolsList } from './Header'
+import { reducer } from './reducer'
+import { createStore } from 'redux'
+import { Provider, useDispatch, useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
+import { linesSelector } from './selectors'
+import { clear } from './actions'
 
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
@@ -44,7 +50,21 @@ const useTools = (imageRef, settings) => ({
   arrow: useArrow(imageRef, settings)
 })
 
-function App() {
+const store = createStore(reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+)
+
+const Wrapper = ({ children }) => (
+  <Provider store={store}>
+    {children}
+  </Provider>
+)
+Wrapper.propTypes = {
+  children: PropTypes.Node
+}
+
+const Main = () => {
+  const dispatch = useDispatch()
   const [activeTool, setActiveTool] = useState(ToolsList[0].id)
   const [strokeWidth, setStrokeWidth] = useState(4)
   const stageRef = useRef(null)
@@ -54,9 +74,9 @@ function App() {
   const headerRef = useRef(null)
   const tools = useTools(imageRef, { strokeWidth })
   const {
-    brush: { lines },
     arrow: { arrowInProgress, arrows }
   } = tools
+  const lines = useSelector(linesSelector)
   const { width: winWidth, height: winHeight } = useWindowDimensions()
   const canvasWidth = winWidth
   const [initialHeaderSize, setInitialHeaderSize] = useState(0)
@@ -95,7 +115,8 @@ function App() {
 
   const onClear = () => {
     setCurrentFile(null)
-    Object.values(tools).forEach(({ clear }) => clear())
+    dispatch(clear())
+    // Object.values(tools).forEach(({ clear }) => clear())
   }
 
   const onToolChange = ({ target: { value } }) => {
@@ -162,5 +183,11 @@ function App() {
     </div>
   )
 }
+
+const App = () => (
+  <Wrapper>
+    <Main />
+  </Wrapper>
+)
 
 export default App

@@ -1,13 +1,15 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
+import { useDispatch } from 'react-redux'
+import { addLinePoint, startLine } from './actions'
 
 export const useBrush = (imageRef, { strokeWidth }) => {
-  const [lines, setLines] = useState([])
+  const dispatch = useDispatch()
   const isDrawing = useRef(false)
 
   const handleMouseDown = () => {
     isDrawing.current = true
     const pos = imageRef.current.getRelativePointerPosition()
-    setLines([...lines, {  points: [pos.x, pos.y], strokeWidth }])
+    dispatch(startLine({ points: [pos.x, pos.y], strokeWidth }))
   }
 
   const handleMouseMove = () => {
@@ -16,23 +18,19 @@ export const useBrush = (imageRef, { strokeWidth }) => {
       return
     }
     const point = imageRef.current.getRelativePointerPosition()
-    let lastLine = lines[lines.length - 1]
-    // add point
-    lastLine.points = lastLine.points.concat([point.x, point.y])
 
-    // replace last
-    lines.splice(lines.length - 1, 1, lastLine)
-    setLines(lines.concat())
+    dispatch(addLinePoint([point.x, point.y]))
   }
 
   const handleMouseUp = () => {
     isDrawing.current = false
   }
 
-  const clear = () => {setLines([])}
+  const clear = () => {
+    // TODO: remove
+  }
 
   return {
-    lines,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
