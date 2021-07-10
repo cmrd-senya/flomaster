@@ -114,6 +114,8 @@ function App() {
         onClear={onClear}
         onToolChange={onToolChange}
         onSave={onSave}
+        imageWidth={width}
+        imageHeight={height}
       />
 
       <Stage

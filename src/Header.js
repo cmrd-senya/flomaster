@@ -63,6 +63,8 @@ export const ToolsList = [
 ]
 
 export const Header = forwardRef(({
+  imageWidth,
+  imageHeight,
   activeTool,
   strokeWidth,
   onFileSelect,
@@ -118,6 +120,9 @@ export const Header = forwardRef(({
             }}
           />
         </ToolbarElement>
+        <ToolbarElement>
+          Image size: {imageWidth}x{imageHeight}
+        </ToolbarElement>
       </ToolBar>
     </div>
   )
@@ -125,6 +130,8 @@ export const Header = forwardRef(({
 
 Header.displayName = 'Header'
 Header.propTypes = {
+  imageWidth: PropTypes.number,
+  imageHeight: PropTypes.number,
   activeTool: PropTypes.string,
   strokeWidth: PropTypes.number,
   onFileSelect: PropTypes.function,
