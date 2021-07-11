@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Header, ToolsList } from './Header'
 import { reducer } from './reducer'
 import { createStore } from 'redux'
@@ -55,7 +55,7 @@ Wrapper.propTypes = {
   children: PropTypes.node
 }
 
-const Main = () => {
+const Main = ({ file: launchFile }) => {
   const dispatch = useDispatch()
   const [activeTool, setActiveTool] = useState(ToolsList[0].id)
   const stageRef = useRef(null)
@@ -67,16 +67,23 @@ const Main = () => {
   const headerSize = (headerRef.current && headerRef.current.offsetHeight) || initialHeaderSize
   const canvasHeight = winHeight - headerSize
   const [, { width, height }] = useImageExt()
-  const onFileSelect = (event) => {
+
+  const readFile = useCallback((file) => {
     const fr = new FileReader()
     fr.onloadend = () => {
       dispatch(setImage(fr.result))
     }
-    fr.readAsDataURL(event.target.files[0])
+    fr.readAsDataURL(file)
+  }, [dispatch])
+
+  const onFileSelect = (event) => {
+    readFile(event.target.files[0])
   }
 
-  console.log('canvasWidth', canvasWidth)
-  console.log('canvasHeight', canvasHeight)
+  useEffect(() => {
+    if (!launchFile) { return }
+    readFile(launchFile)
+  }, [readFile, launchFile])
 
   useLayoutEffect(() => {
     setInitialHeaderSize(headerRef.current.offsetHeight)
@@ -135,10 +142,13 @@ const Main = () => {
     </div>
   )
 }
+Main.propTypes = {
+  file: PropTypes.object
+}
 
-const App = () => (
+const App = (props) => (
   <Wrapper>
-    <Main />
+    <Main {...props} />
   </Wrapper>
 )
 

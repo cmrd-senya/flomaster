@@ -1,6 +1,15 @@
 {
   "short_name": "Flomaster",
   "name": "Flomaster - image editor",
+  "file_handlers": [
+    {
+      "action": "/",
+      "name": "Image",
+      "accept": {
+        "image/*": [ ".png", ".jpg", ".jpeg" ]
+      }
+    }
+  ],
   "icons": [
     {
       "src": "favicon.ico",

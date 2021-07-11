@@ -4,10 +4,17 @@ import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
+import { LaunchFileHandler } from './LaunchFileHandler'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <LaunchFileHandler>
+      {
+        (file) => (
+          <App file={file} />
+        )
+      }
+    </LaunchFileHandler>
   </React.StrictMode>,
   document.getElementById('root')
 )
