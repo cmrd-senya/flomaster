@@ -52,7 +52,7 @@ const Wrapper = ({ children }) => (
   </Provider>
 )
 Wrapper.propTypes = {
-  children: PropTypes.Node
+  children: PropTypes.node
 }
 
 const Main = () => {

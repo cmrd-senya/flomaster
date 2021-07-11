@@ -152,8 +152,8 @@ Header.propTypes = {
   imageWidth: PropTypes.number,
   imageHeight: PropTypes.number,
   activeTool: PropTypes.string,
-  onFileSelect: PropTypes.function,
-  onClear: PropTypes.function,
-  onToolChange: PropTypes.function,
-  onSave: PropTypes.function
+  onFileSelect: PropTypes.func,
+  onClear: PropTypes.func,
+  onToolChange: PropTypes.func,
+  onSave: PropTypes.func
 }
