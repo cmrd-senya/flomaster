@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { commitRectangle, startRectangle, updateRectangleCorner } from './actions'
 import { rectInProgressSelector } from './selectors'

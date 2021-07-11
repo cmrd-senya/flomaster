@@ -1,9 +1,15 @@
 const initialState = {
+  strokeWidth: 4,
   rectangle: null
 }
 
 export const toolsReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_STROKE_WIDTH': 
+      return {
+        ...state,
+        strokeWidth: action.payload 
+      }
     case 'START_RECTANGLE': {
       const { strokeWidth, x: x1, y: y1 } = action.payload
       return {

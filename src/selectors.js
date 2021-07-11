@@ -49,3 +49,10 @@ export const rectInProgressSelector = createSelector(
     })
   }
 )
+
+export const strokeWidthSelector = createSelector(
+  toolsSelector,
+  ({ strokeWidth }) => strokeWidth
+)
+
+export const imageSelector = ({ image: { image } }) => image

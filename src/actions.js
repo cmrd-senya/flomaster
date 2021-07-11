@@ -28,6 +28,16 @@ export const commitRectangle = (payload) => ({
   payload
 })
 
+export const setStrokeWidth = (strokeWidth) => ({
+  type: 'SET_STROKE_WIDTH',
+  payload: strokeWidth
+})
+
+export const setImage = (imageString) => ({
+  type: 'SET_IMAGE',
+  imageString
+})
+
 export const undo = () => ({
   type: 'UNDO'
 })

@@ -2,8 +2,8 @@ import styled from 'astroturf/react'
 import PropTypes from 'prop-types'
 import { forwardRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { redo, undo } from './actions'
-import { futureHistoryEmpty, pastHistoryEmpty } from './selectors'
+import { redo, setStrokeWidth, undo } from './actions'
+import { futureHistoryEmpty, pastHistoryEmpty, strokeWidthSelector } from './selectors'
 
 const FlexBox = styled('div')`
   display: flex;
@@ -73,14 +73,13 @@ export const Header = forwardRef(({
   imageWidth,
   imageHeight,
   activeTool,
-  strokeWidth,
   onFileSelect,
   onClear,
   onToolChange,
-  onStrokeWidthChange,
   onSave
 }, ref) => {
   const dispatch = useDispatch()
+  const strokeWidth = useSelector(strokeWidthSelector)
 
   return (
     <div ref={ref}>
@@ -133,9 +132,10 @@ export const Header = forwardRef(({
           <NumberInput
             value={strokeWidth}
             type="number"
+            min={0}
             max={100}
             onChange={(event) => {
-              onStrokeWidthChange(event.target.value)
+              dispatch(setStrokeWidth(event.target.value))
             }}
           />
         </ToolbarElement>
@@ -152,10 +152,8 @@ Header.propTypes = {
   imageWidth: PropTypes.number,
   imageHeight: PropTypes.number,
   activeTool: PropTypes.string,
-  strokeWidth: PropTypes.number,
   onFileSelect: PropTypes.function,
   onClear: PropTypes.function,
   onToolChange: PropTypes.function,
-  onStrokeWidthChange: PropTypes.function,
   onSave: PropTypes.function
 }
