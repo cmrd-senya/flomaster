@@ -8,7 +8,7 @@ import { reducer } from './reducer'
 import { createStore } from 'redux'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { linesSelector } from './selectors'
+import { arrowsSelector, linesSelector } from './selectors'
 import { clear } from './actions'
 
 // function from https://stackoverflow.com/a/15832662/512042
@@ -74,9 +74,10 @@ const Main = () => {
   const headerRef = useRef(null)
   const tools = useTools(imageRef, { strokeWidth })
   const {
-    arrow: { arrowInProgress, arrows }
+    arrow: { arrowInProgress }
   } = tools
   const lines = useSelector(linesSelector)
+  const arrows = useSelector(arrowsSelector)
   const { width: winWidth, height: winHeight } = useWindowDimensions()
   const canvasWidth = winWidth
   const [initialHeaderSize, setInitialHeaderSize] = useState(0)
@@ -119,7 +120,6 @@ const Main = () => {
     }
     setCurrentFile(null)
     dispatch(clear())
-    // Object.values(tools).forEach(({ clear }) => clear())
   }
 
   const onToolChange = ({ target: { value } }) => {

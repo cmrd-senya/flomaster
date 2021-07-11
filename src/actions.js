@@ -8,6 +8,11 @@ export const addLinePoint = (payload) => ({
   payload
 })
 
+export const addArrow = (payload) => ({
+  type: 'ADD_ARROW',
+  payload
+})
+
 export const undo = () => ({
   type: 'UNDO'
 })

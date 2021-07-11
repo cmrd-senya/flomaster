@@ -7,6 +7,11 @@ export const linesSelector = createSelector(
   ({ present: { lines } }) => lines
 )
 
+export const arrowsSelector = createSelector(
+  drawingSelector,
+  ({ present: { arrows } }) => arrows
+)
+
 export const pastHistoryEmpty = createSelector(
   drawingSelector,
   ({ past }) => past.length === 0

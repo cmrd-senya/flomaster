@@ -1,28 +1,31 @@
 const initialState = {
   past: [],
   present: {
+    arrows: [],
     lines: []
   },
   future: []
 }
 
+const startNewHistoryPoint = (state, newPresent) => ({
+  past: [
+    ...state.past.slice(-10),
+    state.present
+  ],
+  present: newPresent,
+  future: []
+})
+
 export const drawingReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'START_LINE': {
-      return {
-        past: [
-          ...state.past.slice(-10),
-          state.present
-        ],
-        present: {
-          ...state.present,
-          lines: [
-            ...state.present.lines,
-            action.payload
-          ]
-        },
-        future: []
-      }
+      return startNewHistoryPoint(state, {
+        ...state.present,
+        lines: [
+          ...state.present.lines,
+          action.payload
+        ]
+      })
     }
     case 'ADD_LINE_POINT': {
       const lastLine = state.present.lines[state.present.lines.length - 1]
@@ -43,6 +46,15 @@ export const drawingReducer = (state = initialState, action) => {
           ]
         }
       }
+    }
+    case 'ADD_ARROW': {
+      return startNewHistoryPoint(state, {
+        ...state.present,
+        arrows: [
+          ...state.present.arrows,
+          action.payload
+        ]
+      })
     }
     case 'UNDO': {
       if (state.past.length === 0) { return state }

@@ -26,14 +26,9 @@ export const useBrush = (imageRef, { strokeWidth }) => {
     isDrawing.current = false
   }
 
-  const clear = () => {
-    // TODO: remove
-  }
-
   return {
     handleMouseDown,
     handleMouseMove,
-    handleMouseUp,
-    clear
+    handleMouseUp
   }
 }

@@ -1,19 +1,19 @@
 import { useRef, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addArrow } from './actions'
 
 export const useArrow = (imageRef, { strokeWidth }) => {
-  const [arrows, setArrows] = useState([])
+  const dispatch = useDispatch()
   const isDrawing = useRef(false)
-  
+
+  // tools reducers?
   const [arrowInProgress, setArrowInProgress] = useState(null)
 
   const handleMouseDown = () => {
     isDrawing.current = !isDrawing.current
 
     if (!isDrawing.current) {
-      setArrows([
-        ...arrows,
-        arrowInProgress
-      ])
+      dispatch(addArrow(arrowInProgress))
       setArrowInProgress(null)
       return
     }
@@ -37,12 +37,8 @@ export const useArrow = (imageRef, { strokeWidth }) => {
   }
 
   return {
-    arrows,
     arrowInProgress,
     handleMouseDown,
-    handleMouseMove,
-    clear: () =>{
-      setArrows([])
-    }
+    handleMouseMove
   }
 }
