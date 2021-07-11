@@ -40,6 +40,8 @@ export const rectInProgressSelector = createSelector(
     if (!rectangle) { return null }
 
     const { strokeWidth, x1, y1, x2, y2 } = rectangle
+    if (!x1 || !x2 || !y1 || !y2) { return null }
+
     return ({
       strokeWidth,
       x: Math.min(x1, x2),
