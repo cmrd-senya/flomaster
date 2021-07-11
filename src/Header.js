@@ -76,6 +76,7 @@ export const Header = forwardRef(({
   onFileSelect,
   onClear,
   onToolChange,
+  onCopy,
   onSave
 }, ref) => {
   const dispatch = useDispatch()
@@ -89,6 +90,9 @@ export const Header = forwardRef(({
         </ToolbarElement>
         <ToolbarElement>
           <input type="file" onChange={onFileSelect} />
+        </ToolbarElement>
+        <ToolbarElement>
+          <button onClick={onCopy}>Copy to Clipboard</button>
         </ToolbarElement>
       </MenuBar>
       <ToolBar>
@@ -155,5 +159,6 @@ Header.propTypes = {
   onFileSelect: PropTypes.func,
   onClear: PropTypes.func,
   onToolChange: PropTypes.func,
+  onCopy: PropTypes.func,
   onSave: PropTypes.func
 }

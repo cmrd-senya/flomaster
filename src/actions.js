@@ -35,7 +35,7 @@ export const setStrokeWidth = (strokeWidth) => ({
 
 export const setImage = (imageString) => ({
   type: 'SET_IMAGE',
-  imageString
+  payload: imageString
 })
 
 export const undo = () => ({

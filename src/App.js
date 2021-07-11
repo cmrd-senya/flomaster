@@ -86,6 +86,21 @@ const Main = () => {
     downloadURI(stageRef.current.toDataURL(), 'flomaster-image.png')
   }
 
+  const onCopy = () => {
+    if (typeof ClipboardItem === 'undefined') {
+      alert('Error: Clipboard API is not fully supported in your browser! Cannot copy.')
+      return
+    }
+
+    stageRef.current.toCanvas().toBlob(async (blob) => {
+      const cbItem = new ClipboardItem({ // eslint-disable-line no-undef
+        'image/png': blob
+      })
+      await navigator.clipboard.write([cbItem])
+      console.log('Copied!') // TODO: add visible status
+    })
+  }
+
   const onClear = () => {
     if (!confirm('This will clear your canvas. U sure?')) {
       return
@@ -107,6 +122,7 @@ const Main = () => {
         onClear={onClear}
         onToolChange={onToolChange}
         onSave={onSave}
+        onCopy={onCopy}
         imageWidth={width}
         imageHeight={height}
       />
