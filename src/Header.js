@@ -44,15 +44,19 @@ const RedoButton = (props) => (
 
 
 const Tool = ({ id, label, ...inputProps }) => (
-  <div>
+  <FlexBox>
     <input name="tool" type="radio" id={id} value={id} {...inputProps} />
     <label htmlFor={id}>{label}</label>
-  </div>
+  </FlexBox>
 )
 Tool.propTypes = {
   id: PropTypes.string,
   label: PropTypes.string,
 }
+
+const ToolsListWrap = styled(FlexBox)`
+  flex-wrap: wrap;
+`
 
 export const ToolsList = [
   {
@@ -116,7 +120,7 @@ export const Header = forwardRef(({
         <ToolbarElement>
           <ToolBox>
             Tools:
-            <FlexBox>
+            <ToolsListWrap>
               {
                 ToolsList.map(({ id, label }) => (
                   <Tool
@@ -128,7 +132,7 @@ export const Header = forwardRef(({
                   />
                 ))
               }
-            </FlexBox>
+            </ToolsListWrap>
           </ToolBox>
         </ToolbarElement>
         <ToolbarElement>
