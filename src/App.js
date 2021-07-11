@@ -114,6 +114,9 @@ const Main = () => {
   }
 
   const onClear = () => {
+    if (!confirm('This will clear your canvas. U sure?')) {
+      return
+    }
     setCurrentFile(null)
     dispatch(clear())
     // Object.values(tools).forEach(({ clear }) => clear())
