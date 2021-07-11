@@ -44,10 +44,10 @@ const RedoButton = (props) => (
 
 
 const Tool = ({ id, label, ...inputProps }) => (
-  <>
+  <div>
     <input name="tool" type="radio" id={id} value={id} {...inputProps} />
     <label htmlFor={id}>{label}</label>
-  </>
+  </div>
 )
 Tool.propTypes = {
   id: PropTypes.string,
@@ -62,6 +62,10 @@ export const ToolsList = [
   {
     id: 'arrow',
     label: 'Arrow'
+  },
+  {
+    id: 'rect',
+    label: 'Rectangle'
   }
 ]
 
@@ -109,7 +113,7 @@ export const Header = forwardRef(({
         <ToolbarElement>
           <ToolBox>
             Tools:
-            <div>
+            <FlexBox>
               {
                 ToolsList.map(({ id, label }) => (
                   <Tool
@@ -121,7 +125,7 @@ export const Header = forwardRef(({
                   />
                 ))
               }
-            </div>
+            </FlexBox>
           </ToolBox>
         </ToolbarElement>
         <ToolbarElement>

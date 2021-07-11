@@ -1,4 +1,4 @@
-import { Arrow, Image, Layer, Line, Stage } from 'react-konva'
+import { Arrow, Image, Layer, Line, Rect, Stage } from 'react-konva'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import useImage from 'use-image'
 import { useBrush } from './useBrush'
@@ -8,8 +8,9 @@ import { reducer } from './reducer'
 import { createStore } from 'redux'
 import { Provider, useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { arrowsSelector, linesSelector } from './selectors'
+import { arrowsSelector, linesSelector, rectanglesSelector, rectInProgressSelector } from './selectors'
 import { clear } from './actions'
+import { useRect } from './useRect'
 
 // function from https://stackoverflow.com/a/15832662/512042
 function downloadURI(uri, name) {
@@ -47,7 +48,8 @@ function useWindowDimensions() {
 
 const useTools = (imageRef, settings) => ({
   brush: useBrush(imageRef, settings),
-  arrow: useArrow(imageRef, settings)
+  arrow: useArrow(imageRef, settings),
+  rect: useRect(imageRef, settings)
 })
 
 const store = createStore(reducer,
@@ -76,8 +78,10 @@ const Main = () => {
   const {
     arrow: { arrowInProgress }
   } = tools
+  const rectInProgress = useSelector(rectInProgressSelector)
   const lines = useSelector(linesSelector)
   const arrows = useSelector(arrowsSelector)
+  const rectangles = useSelector(rectanglesSelector)
   const { width: winWidth, height: winHeight } = useWindowDimensions()
   const canvasWidth = winWidth
   const [initialHeaderSize, setInitialHeaderSize] = useState(0)
@@ -179,6 +183,19 @@ const Main = () => {
               points={arrow.points}
               stroke='red'
               strokeWidth={arrow.strokeWidth}
+            />
+          ))}
+          {
+            rectInProgress && <Rect
+              stroke="#df4b26"
+              {...rectInProgress}
+            />
+          }
+          {rectangles.map((rectangle, i) => (
+            <Rect
+              key={i}
+              stroke="#df4b26"
+              {...rectangle}
             />
           ))}
         </Layer>

@@ -13,6 +13,21 @@ export const addArrow = (payload) => ({
   payload
 })
 
+export const startRectangle = (payload) => ({
+  type: 'START_RECTANGLE',
+  payload
+})
+
+export const updateRectangleCorner = (payload) => ({
+  type: 'UPDATE_RECTANGLE_CORNER',
+  payload
+})
+
+export const commitRectangle = (payload) => ({
+  type: 'COMMIT_RECTANGLE',
+  payload
+})
+
 export const undo = () => ({
   type: 'UNDO'
 })

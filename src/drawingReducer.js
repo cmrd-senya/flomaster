@@ -2,7 +2,8 @@ const initialState = {
   past: [],
   present: {
     arrows: [],
-    lines: []
+    lines: [],
+    rectangles: []
   },
   future: []
 }
@@ -52,6 +53,15 @@ export const drawingReducer = (state = initialState, action) => {
         ...state.present,
         arrows: [
           ...state.present.arrows,
+          action.payload
+        ]
+      })
+    }
+    case 'COMMIT_RECTANGLE': {
+      return startNewHistoryPoint(state, {
+        ...state.present,
+        rectangles: [
+          ...state.present.rectangles,
           action.payload
         ]
       })
